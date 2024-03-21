@@ -6,8 +6,8 @@
  * Eine Klasse zur Validierung von Eingabedaten mit zusätzlichen Funktionen für Regeldefinition und Fehlerverwaltung.
  *
  * Autor:   K3nguruh <k3nguruh at mail dot de>
- * Version: 1.1.0
- * Datum:   2024-03-21 15:30
+ * Version: 1.1.1
+ * Datum:   2024-03-21 18:42
  * Lizenz:  MIT-Lizenz
  */
 
@@ -17,9 +17,9 @@ class Validation extends Validate
 
   private $value;
   private $alias;
-  private $cnt = 0;
-  private $rules = [];
+  private $rules;
   private $errors = [];
+  private $count = 0;
 
   /**
    * Setzt den Wert für die Validierung.
@@ -34,7 +34,8 @@ class Validation extends Validate
   public function setValue($value)
   {
     $this->value = trim($value);
-    $this->alias = $this->cnt++;
+    $this->alias = $this->count++;
+    $this->rules = [];
 
     return $this;
   }
@@ -53,6 +54,7 @@ class Validation extends Validate
   {
     $this->value = trim($array[$name]);
     $this->alias = $name;
+    $this->rules = [];
 
     return $this;
   }
@@ -85,7 +87,7 @@ class Validation extends Validate
    */
   public function setRule($rule, $message)
   {
-    $this->rules[$this->alias][] = ["rule" => $rule, "message" => $message];
+    $this->rules[] = ["rule" => $rule, "message" => $message];
 
     return $this;
   }
@@ -101,19 +103,17 @@ class Validation extends Validate
    */
   public function validate()
   {
-    foreach ($this->rules as $alias => $rules) {
-      foreach ($rules as $rule) {
-        $args = explode(self::DEFAULT_SEPARATOR, $rule["rule"]);
-        $methodName = "validate" . ucfirst(array_shift($args));
+    foreach ($this->rules as $rule) {
+      $args = explode(self::DEFAULT_SEPARATOR, $rule["rule"]);
+      $methodName = "validate" . ucfirst(array_shift($args));
 
-        if (!method_exists($this, $methodName)) {
-          throw new InvalidArgumentException("Ungültige Validierungsregel: {$methodName}");
-        }
+      if (!method_exists($this, $methodName)) {
+        throw new InvalidArgumentException("Ungültige Validierungsregel: {$methodName}");
+      }
 
-        if (!$this->$methodName($this->value, ...$args)) {
-          $this->errors[$alias] = $rule["message"];
-          break;
-        }
+      if (!$this->$methodName($this->value, ...$args)) {
+        $this->errors[$this->alias] = $rule["message"];
+        break;
       }
     }
 
@@ -130,11 +130,6 @@ class Validation extends Validate
    */
   public function errors()
   {
-    $errors = $this->errors;
-    $this->cnt = 0;
-    $this->rules = [];
-    $this->errors = [];
-
-    return $errors;
+    return $this->errors;
   }
 }
