@@ -52,7 +52,7 @@ $validation
 
 //
 //
-$errors = $validation->errors();
+$errors = $validation->getErrors();
 
 //
 //

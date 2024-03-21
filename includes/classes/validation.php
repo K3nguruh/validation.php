@@ -6,8 +6,8 @@
  * Eine Klasse zur Validierung von Eingabedaten mit zusätzlichen Funktionen für Regeldefinition und Fehlerverwaltung.
  *
  * Autor:   K3nguruh <k3nguruh at mail dot de>
- * Version: 1.1.1
- * Datum:   2024-03-21 18:42
+ * Version: 1.1.2
+ * Datum:   2024-03-21 23:45
  * Lizenz:  MIT-Lizenz
  */
 
@@ -123,12 +123,9 @@ class Validation extends Validate
   /**
    * Gibt alle Fehlermeldungen zurück, die während der Validierung aufgetreten sind.
    *
-   * Diese Methode gibt alle gesammelten Fehlermeldungen zurück und setzt die Variablen zurück,
-   * für den Fall einer weiteren Validierung.
-   *
    * @return array Die Fehlermeldungen.
    */
-  public function errors()
+  public function getErrors()
   {
     return $this->errors;
   }
