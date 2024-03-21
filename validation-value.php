@@ -21,7 +21,7 @@ $post = [
 //
 //
 $validation
-  ->setCheck($post, "id")
+  ->setValue($post["id"])
   ->setRule("required", "Bitte eine ID eingeben.")
   ->setRule("match||[1-9]\d{3}", "Bitte eine gültige ID eingeben.")
   ->validate();
@@ -29,7 +29,7 @@ $validation
 //
 //
 $validation
-  ->setCheck($post, "name")
+  ->setValue($post["name"])
   ->setAlias("name-2")
   ->setRule("required", "Bitte einen Namen eingeben.")
   ->validate();
@@ -37,7 +37,7 @@ $validation
 //
 //
 $validation
-  ->setCheck($post, "datum")
+  ->setValue($post["datum"])
   ->setRule("required", "Bitte eine Datum eingeben.")
   ->setRule("date||Y-m-d", "Bitte ein gültiges Datum eingeben.")
   ->validate();
@@ -45,7 +45,7 @@ $validation
 //
 //
 $validation
-  ->setCheck($post, "alter")
+  ->setValue($post["alter"])
   ->setRule("required", "Bitte ein Alter eingeben.")
   ->setRule("min||16", "Du musst 16 Jahre oder älter sein.")
   ->validate();
