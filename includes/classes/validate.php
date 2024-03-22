@@ -8,8 +8,8 @@
  * E-Mail-Adressen, URLs, Datumsangaben und numerischen Werten.
  *
  * Autor:   K3nguruh <k3nguruh at mail dot de>
- * Version: 1.0.0
- * Datum:   2024-03-13 16:41
+ * Version: 1.0.1
+ * Datum:   2024-03-22 19:40
  * Lizenz:  MIT-Lizenz
  */
 
@@ -57,6 +57,36 @@ class Validate
   public function validateMatch($value, $regex)
   {
     return preg_match("/^{$regex}$/", $value) === 1;
+  }
+
+  /**
+   * Überprüft, ob ein Wert keine HTML-Tags enthält.
+   *
+   * Diese Methode akzeptiert einen Wert ($value) und überprüft, ob dieser keinerlei HTML-Tags enthält.
+   * Sie gibt false zurück, wenn der Wert HTML-Tags enthält, ansonsten true.
+   *
+   * @param string $value Der zu überprüfende Wert.
+   * @return bool Gibt false zurück, wenn der Wert HTML-Tags enthält, ansonsten true.
+   */
+  public function validateText($value)
+  {
+    return preg_match("/<[^>]*>/", $value) === 0;
+  }
+
+  /**
+   * Überprüft, ob ein Wert nur erlaubte HTML-Tags enthält.
+   *
+   * Diese Methode akzeptiert einen Wert ($value) und überprüft, ob dieser nur erlaubte HTML-Tags enthält,
+   * die in der Liste der erlaubten Tags ($allowedTags) aufgeführt sind.
+   * Sie gibt false zurück, wenn der Wert unerlaubte Tags enthält, ansonsten true.
+   *
+   * @param string $value Der zu überprüfende Wert.
+   * @param string $allowed (Optional) Eine Zeichenfolge, die die erlaubten HTML-Tags enthält (Standard: bestimmte harmlose Tags).
+   * @return bool Gibt false zurück, wenn der Wert unerlaubte HTML-Tags enthält, ansonsten true.
+   */
+  public function validateHtml($value, $allowed = "<a><b><i><u><s><p><div><span><h1><h2><h3><h4><h5><h6><ul><ol><li><hr><br>")
+  {
+    return preg_match("/<(?!\/?($allowed)\b)[^>]+>/i", $value) === 0;
   }
 
   /**
